@@ -1,18 +1,40 @@
 $(function(){
-	//this code will execute after the DOM is loaded
+var carousel = $("#carousel");
+var gallery = $(".gallery");
+var dots = $(".dots");
+
+gallery.find("li").each(function(){
+	dots.append("<li></li>");
+}) 
+
+var dot = dots.find("li");
+dot.first().addClass("active");
+
+dot.click(function(){
+	target = $(this).index();
+	moveSlider(target);
 });
 
-var carouselList = $("#carousel ul");
-setInterval(changeSlide, 3000); 
-
-function changeSlide(){
-	carouselList.animate({'marginLeft':-400}, 500, moveFirstSlide);
+function moveSlider(target){
+	gallery.stop().animate({
+		"left": -400 * target
+	});
+	dot.removeClass("active").eq(target).addClass("active");
 }
 
-function moveFirstSlide(){
-	var firstItem = carouselList.find("li:first");
-	var lastItem = carouselList.find("li:last");
+var right = $(".arrow-right");
+right.click(function(){
+	target = dot.siblings(".active").index();
+	target == dot.length - 1 ? target = 0 : target += 1;
+	moveSlider(target);
+})
 
-	lastItem.after(firstItem);
-	carouselList.css({marginLeft:-50});
-}
+var left = $(".arrow-left");
+left.click(function(){
+	target = dot.siblings(".active").index();
+	target == dot.length - 5 ? target = 4 : target -= 1;
+	moveSlider(target);
+})
+
+});
+
